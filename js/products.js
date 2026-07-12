@@ -66,7 +66,7 @@ const PRODUCTS = [
     price: 99,
     unit: '单',
     tag: '',
-    cover: 'images/products/b3-cover.jpg',
+    cover: 'images/products/IMG_5106.jpeg',
     detailImage: 'images/products/884.png',
     desc: '99r保底1488w',
     detail: '对局内出现任何问题请保存录屏联系客服处理。',
