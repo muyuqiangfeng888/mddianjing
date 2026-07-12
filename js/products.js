@@ -41,7 +41,7 @@ const PRODUCTS = [
     unit: '单',
     tag: '',
     cover: 'images/products/b1-cover.jpg',
-    detailImage:'images/products/diandanxuzhi.png',
+    detailImage:'images/products/884.png',
     desc: '78r保底700w',
     detail: '对局内出现任何问题请保存录屏联系客服处理。',
     notice: '下单前请仔细阅读以下点单须知',
