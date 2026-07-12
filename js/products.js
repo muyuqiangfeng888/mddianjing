@@ -105,7 +105,7 @@ const PRODUCTS = [
     price: 128,
     unit: '单',
     tag: '',
-    cover: 'images/products/b5-cover.jpg',
+    cover: 'images/products/b6-cover.jpg',
     detailImage: 'images/products/884.png',
     desc: '128r保底700w',
     detail: '对局内出现任何问题请保存录屏联系客服处理。',
