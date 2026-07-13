@@ -16,8 +16,8 @@ const ORDER_FORM_URL = 'https://docs.qq.com/form/page/replace-with-your-form-id'
 
 // 联系方式，改这里就行
 const CONTACT = {
-  officialAccount: 'your_official_account',
-  kookId: 'your_kook_id',
+  officialAccount: 'MD电竞Pro',
+  kookId: '暂未开放',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
