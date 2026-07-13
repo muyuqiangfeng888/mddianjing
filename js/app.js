@@ -4,7 +4,14 @@
    这个文件本身不需要因为增删项目而修改。
    ============================================================ */
 
-// 下单收集表单地址（腾讯文档等），改这里就行
+// 下单收集表单地址（腾讯文档等）
+// 现在所有项目都有"手游/端游"选项，默认走下面这两个表单——
+// 只需要在这里改这两个链接，全站所有项目就都跟着换了。
+// 如果某个项目的手游或端游要单独用不同的表单，去 products.js
+// 那个项目的 platforms 里给对应平台加一个 formUrl 字段，会优先用那个。
+const ORDER_FORM_URL_MOBILE = 'https://docs.qq.com/form/page/replace-with-your-mobile-form-id';
+const ORDER_FORM_URL_PC = 'https://docs.qq.com/form/page/replace-with-your-pc-form-id';
+// 没有手游/端游选项的老项目，走这个兜底表单
 const ORDER_FORM_URL = 'https://docs.qq.com/form/page/replace-with-your-form-id';
 
 // 联系方式，改这里就行
@@ -261,12 +268,14 @@ function bindOrderDetailEvents() {
 
   document.getElementById('detailContactBtn').addEventListener('click', () => detailGoTo('contact'));
   document.getElementById('detailOrderBtn').addEventListener('click', () => {
-    // 手游/端游各自跳转到自己的下单表单；普通项目走 formUrl 或默认表单
+    // 手游/端游各自跳转到自己的下单表单；
+    // 项目/平台自己没单独配 formUrl 的话，就按平台走全站默认的手游/端游表单
     let targetUrl = ORDER_FORM_URL;
     if (currentDetailItem) {
       if (currentDetailItem.platforms && currentDetailItem.platforms.length) {
         const p = currentDetailItem.platforms[currentPlatformIndex];
-        targetUrl = (p && p.formUrl) || currentDetailItem.formUrl || ORDER_FORM_URL;
+        const platformDefault = p && p.key === 'pc' ? ORDER_FORM_URL_PC : ORDER_FORM_URL_MOBILE;
+        targetUrl = (p && p.formUrl) || currentDetailItem.formUrl || platformDefault;
       } else {
         targetUrl = currentDetailItem.formUrl || ORDER_FORM_URL;
       }
