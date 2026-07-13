@@ -37,27 +37,39 @@
 
 ## 手游/端游价格不同怎么配置？
 
-不用做二级页面，详情页里会直接出现"手游／端游"按钮，点哪个价格就变成哪个，
+现在全站每个项目默认都有"手游／端游"按钮，点哪个价格就变成哪个，
 下单按钮也会跳到对应平台的表单。
 
-在 `js/products.js` 里，把这个项目的 `price` / `unit` 换成 `platforms` 数组：
+在 `js/products.js` 里，每个项目用 `platforms` 字段（而不是单独的
+`price` / `unit`）。为了少打字，文件顶部有个 `makePlatforms()` 小工具：
+
+```js
+platforms: makePlatforms(60, '局', '60r保底600w'),        // 手游/端游价格一样，都是60
+platforms: makePlatforms(60, '局', '60r保底600w', 80),     // 手游60，端游80（第4个参数是端游价）
+```
+
+两个平台默认都会跳到 `js/app.js` 顶部配的 `ORDER_FORM_URL_MOBILE`
+（手游）和 `ORDER_FORM_URL_PC`（端游）——**只需要改这两个链接，
+全站所有项目就都跟着生效**，不用一个个项目单独配。
+
+如果某个项目的手游或端游要单独用别的表单（不走全站默认），
+不用 `makePlatforms()`，改成手写完整的 platforms 数组，加 `formUrl`：
 
 ```js
 platforms: [
-  { key: 'mobile', label: '手游', price: 60, unit: '局', desc: '60r保底600w', formUrl: '手游表单地址' },
-  { key: 'pc',     label: '端游', price: 80, unit: '局', desc: '80r保底600w', formUrl: '端游表单地址' },
+  { key: 'mobile', label: '手游', price: 60, unit: '局', desc: '60r保底600w', formUrl: '这个项目专属的手游表单' },
+  { key: 'pc',     label: '端游', price: 80, unit: '局', desc: '80r保底600w', formUrl: '这个项目专属的端游表单' },
 ],
 ```
-
-参考 `products.js` 里的 `b1` 项目就是这么写的。没有 `platforms` 字段的项目，
-跟以前一样只显示单一价格，不受影响。
 
 ## 联系方式 / 下单表单地址
 
 在 `js/app.js` 顶部：
 
 ```js
-const ORDER_FORM_URL = '...'; // 腾讯文档等收单表单地址
+const ORDER_FORM_URL_MOBILE = '...'; // 手游默认下单表单，全站生效
+const ORDER_FORM_URL_PC = '...';     // 端游默认下单表单，全站生效
+const ORDER_FORM_URL = '...';        // 没有手游/端游选项的老项目走这个
 const CONTACT = {
   wechatId: 'your_wechat_id',
   qq: '000000000',
@@ -68,5 +80,7 @@ const CONTACT = {
 
 - 全部使用「路径引用」，没有使用 Base64，图片文件和代码是分开的，
   以后可以直接在 GitHub 网页端上传/替换/删除图片文件，不用碰代码。
-- 某个项目暂时没有图，把 `cover` / `detailImage` 留空字符串 `""` 即可，
-  卡片会自动显示一个分类图标占位，不会破图。
+- `detailImage` 统一用数组格式，哪怕只有一张也写成 `['xxx.jpg']`，
+  以后要加图，直接在数组里多写一行路径即可。
+- 图片还没传的话，路径先保持代码里写的样子（占位），页面会自动显示
+  分类图标，不会破图；等你传好同名图片，页面自动换成真实图片。
