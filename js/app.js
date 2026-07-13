@@ -74,6 +74,15 @@ function coverMarkup(item, tintIndex) {
   return `<div class="img-fallback">${(CATEGORY_META[item.cat] && CATEGORY_META[item.cat].icon) || '📦'}</div>`;
 }
 
+function cardPriceMarkup(it) {
+  if (it.hidePrice) return '<span style="font-size:14px;color:var(--muted);">敬请期待</span>';
+  if (it.platforms && it.platforms.length) {
+    const minPrice = Math.min(...it.platforms.map(p => p.price));
+    return '¥' + minPrice + '<small> 起</small>';
+  }
+  return '¥' + it.price + '<small> /' + it.unit + '</small>';
+}
+
 function renderOrderItems(catId) {
   const orderGridEl = document.getElementById('orderGrid');
   const items = PRODUCTS.filter(it => it.cat === catId);
@@ -94,7 +103,7 @@ function renderOrderItems(catId) {
         <div class="order-name">${it.name}</div>
         <div class="order-desc">${it.desc || ''}</div>
         <div class="order-price-row">
-          <div class="order-price">${it.hidePrice ? '<span style="font-size:14px;color:var(--muted);">敬请期待</span>' : '¥' + it.price + '<small> /' + it.unit + '</small>'}</div>
+          <div class="order-price">${cardPriceMarkup(it)}</div>
           <div class="order-arrow">›</div>
         </div>
       </div>
@@ -113,10 +122,42 @@ function renderOrderItems(catId) {
 
 const orderDetailEl = document.getElementById('orderDetail');
 let detailOpen = false;
+let currentDetailItem = null;   // 当前打开的项目
+let currentPlatformIndex = 0;   // 当前选中的 手游/端游 下标（如果有）
 
 function detailImagesArray(item) {
   if (!item.detailImage) return [];
   return Array.isArray(item.detailImage) ? item.detailImage.filter(Boolean) : [item.detailImage];
+}
+
+// 渲染 手游/端游 切换按钮；没有 platforms 字段就隐藏整个区块
+function renderPlatformToggle(item) {
+  const wrap = document.getElementById('platformToggle');
+  if (!item || !item.platforms || !item.platforms.length) {
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = item.platforms.map((p, i) =>
+    `<button class="platform-btn${i === 0 ? ' active' : ''}" data-index="${i}">${p.label}</button>`
+  ).join('');
+  wrap.querySelectorAll('.platform-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrap.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectPlatform(item, Number(btn.dataset.index));
+    });
+  });
+}
+
+// 切到某个平台（手游/端游），只更新价格区，不重新加载整个详情页
+function selectPlatform(item, index) {
+  currentPlatformIndex = index;
+  const p = item.platforms[index];
+  document.getElementById('detailPriceNum').textContent = p.price;
+  document.getElementById('detailUnit').textContent = '/ ' + p.unit;
+  document.getElementById('platformDesc').textContent = p.desc || '';
 }
 
 function populateOrderDetail(item) {
@@ -136,19 +177,34 @@ function populateOrderDetail(item) {
   document.getElementById('detailTag').textContent = catName;
   document.getElementById('detailTitle').textContent = item.name;
 
+  currentDetailItem = item;
+  currentPlatformIndex = 0;
+
   const priceEl = document.getElementById('detailPriceNum');
   const unitEl = document.getElementById('detailUnit');
   const currencyEl = document.querySelector('.order-detail-price .currency');
+  const platformDescEl = document.getElementById('platformDesc');
+
   if (item.hidePrice) {
     currencyEl.style.display = 'none';
     priceEl.textContent = '敬请期待';
     priceEl.style.fontSize = '20px';
     unitEl.textContent = '';
+    platformDescEl.textContent = '';
+    renderPlatformToggle(null);
+  } else if (item.platforms && item.platforms.length) {
+    // 手游/端游价格不同：按钮切换，不用二级页面
+    currencyEl.style.display = 'inline';
+    priceEl.style.fontSize = '';
+    renderPlatformToggle(item);
+    selectPlatform(item, 0);
   } else {
     currencyEl.style.display = 'inline';
     priceEl.style.fontSize = '';
     priceEl.textContent = item.price;
     unitEl.textContent = '/ ' + item.unit;
+    platformDescEl.textContent = '';
+    renderPlatformToggle(null);
   }
 
   document.getElementById('detailDesc').textContent = item.detail || '';
@@ -205,8 +261,18 @@ function bindOrderDetailEvents() {
 
   document.getElementById('detailContactBtn').addEventListener('click', () => detailGoTo('contact'));
   document.getElementById('detailOrderBtn').addEventListener('click', () => {
+    // 手游/端游各自跳转到自己的下单表单；普通项目走 formUrl 或默认表单
+    let targetUrl = ORDER_FORM_URL;
+    if (currentDetailItem) {
+      if (currentDetailItem.platforms && currentDetailItem.platforms.length) {
+        const p = currentDetailItem.platforms[currentPlatformIndex];
+        targetUrl = (p && p.formUrl) || currentDetailItem.formUrl || ORDER_FORM_URL;
+      } else {
+        targetUrl = currentDetailItem.formUrl || ORDER_FORM_URL;
+      }
+    }
     if (detailOpen) history.back();
-    setTimeout(() => { window.location.href = ORDER_FORM_URL; }, detailOpen ? 320 : 0);
+    setTimeout(() => { window.location.href = targetUrl; }, detailOpen ? 320 : 0);
   });
 
   // 支持直接通过链接打开某个项目详情，例如分享 #order-p1
