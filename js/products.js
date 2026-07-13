@@ -63,7 +63,7 @@ const PRODUCTS = [
     desc: '60r保底600w',
     detail: '体验单每天每人仅限一单',
     notice: '下单前请仔细阅读以下点单须知',
-    platforms: makePlatforms(60, '单', '60r保底600w'),
+    platforms: makePlatforms(60, '单', '60r保底600w',99),
   },
   {
     id: 'b2',
@@ -75,7 +75,7 @@ const PRODUCTS = [
     desc: '85r保底1000w',
     detail: '对局内出现任何问题请保存录屏联系客服处理',
     notice: '下单前请仔细阅读以下点单须知',
-    platforms: makePlatforms(85, '单', '85r保底1000w,99'),
+    platforms: makePlatforms(85, '单', '85r保底1000w'),
   },
   {
     id: 'b3',
