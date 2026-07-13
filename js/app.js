@@ -16,8 +16,8 @@ const ORDER_FORM_URL = 'https://docs.qq.com/form/page/replace-with-your-form-id'
 
 // 联系方式，改这里就行
 const CONTACT = {
-  wechatId: 'your_wechat_id',
-  qq: '000000000',
+  officialAccount: 'your_official_account',
+  kookId: 'your_kook_id',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -300,9 +300,9 @@ function bindOrderDetailEvents() {
 
 function fillContactInfo() {
   const wechatEl = document.getElementById('contactWechatValue');
-  const qqEl = document.getElementById('contactQQValue');
-  if (wechatEl) wechatEl.textContent = CONTACT.wechatId;
-  if (qqEl) qqEl.textContent = CONTACT.qq;
+  const kookEl = document.getElementById('contactKookValue');
+  if (wechatEl) wechatEl.textContent = CONTACT.officialAccount;
+  if (kookEl) kookEl.textContent = CONTACT.kookId;
 }
 
 function setupReveal() {
