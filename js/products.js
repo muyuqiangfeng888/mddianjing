@@ -75,7 +75,7 @@ const PRODUCTS = [
     desc: '85r保底1000w',
     detail: '对局内出现任何问题请保存录屏联系客服处理',
     notice: '下单前请仔细阅读以下点单须知',
-    platforms: makePlatforms(85, '单', '85r保底1000w'),
+    platforms: makePlatforms(85, '单', '85r保底1000w,99'),
   },
   {
     id: 'b3',
