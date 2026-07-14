@@ -59,7 +59,8 @@ const PRODUCTS = [
     name: '体验单',
     tag: '',
     cover: 'images/products/b1-cover.jpg',
-    detailImage: ['images/products/884.png'],
+    detailImage: [images/products/b1-cover.jpg
+                  'images/products/884.png'],
     desc: '60r保底600w',
     detail: '体验单每天每人仅限一单',
     notice: '下单前请仔细阅读以下点单须知',
