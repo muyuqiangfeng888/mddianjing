@@ -88,9 +88,13 @@ const PRODUCTS = [
     detailImage: ['images/products/b3-cover.jpg',
                   'images/products/884.png'],
     desc: '保底1488w',
-    detail: '对局内出现任何问题请保存录屏联系客服处理',
+    detail: '每人仅限一单，对局内出现任何问题请保存录屏联系客服处理',
     notice: '下单前请仔细阅读以下点单须知',
-    platforms: makePlatforms(99, '单', '保底1488w',158),
+    platforms: [
+  { key: 'mobile', label: '手游', price: 99, unit: '单', desc: '99r保底1488w', formUrl: '你的福利单专属表单链接' },
+  { key: 'pc',     label: '端游', price: 158, unit: '单', desc: '99r保底1488w', formUrl: '你的福利单专属表单链接' },
+],
+
   },
   {
     id: 'b4',
