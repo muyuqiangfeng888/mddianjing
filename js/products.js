@@ -37,7 +37,7 @@ const CATEGORY_META = {
   baodi:  { name: '保底单', icon: '🛡️' },
   duhong: { name: '赌红单', icon: '🎲' },
   quwei:  { name: '趣味单', icon: '🎉' },
-  paodao: { name: '跑刀',   icon: '🔪' },
+  paodao: { name: '哈弗B',   icon: '💰' },
   peiwan: { name: '陪玩',   icon: '🎮' },
 };
 
