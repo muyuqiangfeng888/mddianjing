@@ -285,7 +285,7 @@ const PRODUCTS = [
   {
     id: 'q3',
     cat: 'quwei',
-    name: '赌狗单',
+    name: '猜出生点',
     tag: '',
     cover: 'images/products/q3-cover.jpg',
     detailImage: ['images/products/q3-cover.jpg',
