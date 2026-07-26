@@ -214,9 +214,8 @@ function populateOrderDetail(item) {
     renderPlatformToggle(null);
   }
 
-  document.getElementById('detailDesc').textContent = item.detail || '';
-  document.getElementById('detailNotice').textContent = item.notice || '';
-
+  document.getElementById('detailDesc').innerHTML = item.detail || '';
+  document.getElementById('detailNotice').innerHTML = item.notice || '';
   // 详情图（支持多张，图集展示；没有图不显示这个区块）
   const imagesSection = document.getElementById('detailImagesSection');
   const imagesWrap = document.getElementById('detailImages');
